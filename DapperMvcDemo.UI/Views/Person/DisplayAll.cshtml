@@ -1,10 +1,13 @@
-﻿@model IEnumerable<DapperMvcDemo.Data.Models.Domain.Person>
+﻿@model IEnumerable<Person>
 
 @{
 }
 
 <h3> People list </h3>
 <div class="my-2">
+
+    <a href="/Person/Add" class="btn btn-info my-2"> Add more </a>
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -21,9 +24,9 @@
                     <td> @person.Name </td>
                     <td> @person.Email </td>
                     <td> @person.Address </td>
-                    <td> 
-                        <a href="#" class="btn btn-success"> Edit </a>
-                        <a href="#" class="btn btn-danger"> Delete </a>
+                    <td>
+                        <a href="/Person/Edit?id=@person.Id" class="btn btn-success"> Edit </a>
+                        <a href="/Person/Delete?id=@person.Id" class="btn btn-danger"> Delete </a>
                     </td>
                 </tr>
             }

@@ -13,7 +13,7 @@ namespace DapperMvcDemo.UI.Controllers
             _personRepository = personRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Add()
         {
             return View();
         }
@@ -21,7 +21,25 @@ namespace DapperMvcDemo.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Person person)
         {
-            return View();
+            try
+            {
+                if(!ModelState.IsValid)
+                {
+                    return View(person);
+                }
+
+                bool addPersonResult = await _personRepository.AddAsync(person);
+                if(addPersonResult)
+                    TempData["msg"] = "Successfully added";
+                else
+                    TempData["msg"] = "Could not added";
+
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Could not added";
+            }
+            return RedirectToAction(nameof(Add));
         }
 
         [HttpPost]
