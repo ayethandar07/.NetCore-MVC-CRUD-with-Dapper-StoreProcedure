@@ -42,32 +42,53 @@ namespace DapperMvcDemo.UI.Controllers
             return RedirectToAction(nameof(Add));
         }
 
-        [HttpPost]
         public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var person = await _personRepository.GetByIdAsync(id);
+            //if (person == null)
+            //    return NotFound();
+            return View(person);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(Person person)
         {
-            return View();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(person);
+                }
+
+                var updateResult = await _personRepository.UpdateAsync(person);
+                if (updateResult)
+                {
+                    TempData["msg"] = "Updated Successfully";
+                }
+                else
+                {
+                    TempData["msg"] = "Could not updated";
+                }                    
+            }
+            catch (Exception)
+            {
+                TempData["msg"] = "Could not updated";
+            }
+
+            return View(person);
         }
 
-        [HttpPost]
         public async Task<IActionResult> GetById()
         {
             return View();
         }
 
-        //[HttpPost]
         public async Task<IActionResult> DisplayAll()
         {
             var people = await _personRepository.GetAllAsync();
             return View(people);
         }
 
-        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var deleteResult = await _personRepository.DeleteAsync(id);
